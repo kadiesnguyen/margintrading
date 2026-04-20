@@ -7,20 +7,9 @@
         <div class="container trade_header !mt-[1px]">
           <!-- Currency Selector -->
           <div class="trade_header_item_select">
-            <div class="select_element" @click="toggleCurrencyMenu">
+            <div class="select_element">
               <div class="select_element_name">
                 <p>{{ currentSymbol }}</p>
-                <div class="Iconrowdown">
-                  <i class="fa fa-chevron-down" style="color:#fff;font-size:12px;"></i>
-                </div>
-              </div>
-              <div class="select_element_option_wrapper" :class="{ select_element_option_wrapper_active: showCurrencyMenu }">
-                <div
-                  v-for="sym in symbols"
-                  :key="sym"
-                  class="select_element_option"
-                  @click.stop="selectSymbol(sym)"
-                >{{ sym }}</div>
               </div>
             </div>
           </div>
