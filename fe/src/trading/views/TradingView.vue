@@ -486,10 +486,18 @@ export default {
         },
         xAxis: {
           type: 'datetime',
-          tickAmount: 9,
-          ordinal: false,
-          minPadding: 0.05,
-          maxPadding: 0.05,
+          ordinal: true,
+          tickPositioner: function () {
+            const positions = []
+            const series = this.series[0]
+            if (!series || !series.points || series.points.length === 0) return positions
+            const points = series.points
+            const step = 3
+            for (let i = 0; i < points.length; i += step) {
+              positions.push(points[i].x)
+            }
+            return positions
+          },
           labels: {
             enabled: true,
             formatter: function () { return Highcharts.dateFormat('%M:%S', this.value) },
