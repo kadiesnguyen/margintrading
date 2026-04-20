@@ -1,5 +1,5 @@
 <template>
-  <div style="padding-top: 44px;">
+  <div style="padding-top: 1px;">
     <!-- TRADE CONTAINER -->
     <div class="trade-container">
       <div class="wrapper">
@@ -83,15 +83,15 @@
               <!-- Asks (sell orders) -->
               <div v-show="!isMobile || menuTopHeader === 1" class="trada_parameter_left">
                 <div class="parameter_left_row">
-                  <div class="parameter_title_wrapper">
+                  <div class="parameter_title_wrapper" >
                     <div class="top_colum_title">Price(USDT)</div>
                     <div class="text-right top_colum_title">Amt(BTC)</div>
                     <div class="text-right top_colum_title">Total</div>
                   </div>
-                  <div
+                  <div 
                     v-for="(ask, i) in depthPrice.asks"
                     :key="'ask-'+i"
-                    class="parameter_content"
+                    class="parameter_content" style="padding-bottom: 10px;"
                   >
                     <div class="colum_number colum_number_red">{{ ask.price }}</div>
                     <div class="text-right colum_number">{{ ask.amout }}</div>
@@ -806,13 +806,8 @@ export default {
           color: parseFloat(k[4]) >= parseFloat(k[1]) ? this.colorUp : this.colorDown,
         }))
         if (this.chart && this.chart.series[0]) {
-          // Compute tick interval from price range to get clean round numbers
-          const highs = data.map(k => parseFloat(k[2]))
-          const lows = data.map(k => parseFloat(k[3]))
-          const range = Math.max(...highs) - Math.min(...lows)
-          const rawTick = range / 10
-          const tickInterval = rawTick <= 1.5 ? 1 : rawTick <= 3 ? 2 : rawTick <= 7.5 ? 5 : rawTick <= 15 ? 10 : rawTick <= 75 ? 50 : rawTick <= 150 ? 100 : 500
-          this.chart.yAxis[0].update({ tickInterval }, false)
+          // Always use 1-unit tick interval to match reference
+          this.chart.yAxis[0].update({ tickInterval: 1 }, false)
 
           this.chart.series[0].setData(candles, false)
           this.chart.series[1].setData(volumes, false)
