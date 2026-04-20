@@ -475,7 +475,7 @@ export default {
         },
         xAxis: {
           type: 'datetime',
-          ordinal: false,
+          ordinal: true,
           tickPositioner: function () {
             const positions = []
             if (!this.dataMin || !this.dataMax) return positions
