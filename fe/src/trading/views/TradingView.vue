@@ -486,18 +486,10 @@ export default {
         },
         xAxis: {
           type: 'datetime',
-          tickPositioner: function () {
-            const positions = []
-            const min = this.dataMin
-            const max = this.dataMax
-            const interval = 3 * 60 * 1000
-            let tick = Math.ceil(min / interval) * interval
-            while (tick <= max) {
-              positions.push(tick)
-              tick += interval
-            }
-            return positions
-          },
+          units: [[
+            'minute',
+            [3]
+          ]],
           labels: {
             enabled: true,
             formatter: function () { return Highcharts.dateFormat('%M:%S', this.value) },
