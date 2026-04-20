@@ -117,7 +117,7 @@
               </div>
 
               <!-- Giao dịch tab (history for mobile) -->
-              <div v-show="!isMobile || menuTopHeader === 2" class="trada_parameter_right" style="padding-bottom: 10px;">
+              <div v-show="!isMobile || menuTopHeader === 2" class="trada_parameter_right" >
                 <div class="parameter_left_row">
                   <div class="parameter_title_wrapper">
                     <div class="top_colum_title">Price(USDT)</div>
@@ -128,7 +128,7 @@
                     <div
                       v-for="item in depthPrice.total"
                       :key="item.id"
-                      style="display:flex;width:100%;padding:2px 12px;"
+                      style="display:flex;width:100%;padding:2px 12px;" 
                     >
                       <span style="flex:0 0 34%;overflow:hidden;font-size:11px;font-weight:510;line-height:12px;" :style="{ color: item.isBuy ? '#5be584' : '#f13a3a' }">{{ item.price }}</span>
                       <span style="flex:0 0 36%;overflow:hidden;font-size:11px;font-weight:510;line-height:12px;color:#f4f6f8;">{{ item.amout }}</span>
@@ -806,8 +806,8 @@ export default {
           color: parseFloat(k[4]) >= parseFloat(k[1]) ? this.colorUp : this.colorDown,
         }))
         if (this.chart && this.chart.series[0]) {
-          // Always use 1-unit tick interval to match reference
-          this.chart.yAxis[0].update({ tickInterval: 1 }, false)
+          // Use 2-unit tick interval to get ~11 Y-axis labels like reference
+          this.chart.yAxis[0].update({ tickInterval: 2 }, false)
 
           this.chart.series[0].setData(candles, false)
           this.chart.series[1].setData(volumes, false)
