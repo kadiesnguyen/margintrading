@@ -501,6 +501,7 @@ export default {
           {
             gridLineColor: '#243140',
             gridLineDashStyle: 'Dash',
+            tickAmount: 9,
             labels: {
               align: 'right',
               x: isMobile ? 45 : 50,
@@ -806,8 +807,8 @@ export default {
           color: parseFloat(k[4]) >= parseFloat(k[1]) ? this.colorUp : this.colorDown,
         }))
         if (this.chart && this.chart.series[0]) {
-          // Use 2-unit tick interval to get ~11 Y-axis labels like reference
-          this.chart.yAxis[0].update({ tickInterval: 2 }, false)
+          // Remove tickInterval to let tickAmount control the number of ticks
+          this.chart.yAxis[0].update({ tickInterval: null }, false)
 
           this.chart.series[0].setData(candles, false)
           this.chart.series[1].setData(volumes, false)
