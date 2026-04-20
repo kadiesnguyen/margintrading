@@ -492,8 +492,8 @@ export default {
             const series = this.series[0]
             if (!series || !series.points || series.points.length === 0) return positions
             const points = series.points
-            const step = 3
-            for (let i = 0; i < points.length; i += step) {
+            const step = isMobile ? 4 : 3
+            for (let i = 1; i < points.length; i += step) {
               positions.push(points[i].x)
             }
             return positions
