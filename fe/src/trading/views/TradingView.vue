@@ -476,7 +476,17 @@ export default {
         xAxis: {
           type: 'datetime',
           ordinal: true,
-          tickAmount: 9,
+          tickPositioner: function () {
+            const positions = []
+            if (!this.dataMin || !this.dataMax) return positions
+            const interval = 3 * 60 * 1000
+            const start = Math.ceil(this.dataMin / interval) * interval
+            const end = this.dataMax
+            for (let tick = start; tick <= end; tick += interval) {
+              positions.push(tick)
+            }
+            return positions
+          },
           labels: {
             enabled: true,
             formatter: function () { return Highcharts.dateFormat('%M:%S', this.value) },
