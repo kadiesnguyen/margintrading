@@ -1,0 +1,367 @@
+@font-face {
+	font-family: "xct";
+	src: url("../fonts/xct.eot?201801092");
+	src: url("../fonts/xct.eot?201801092#iefix") format("embedded-opentype"), url("../fonts/xct.ttf?201801092") format("truetype"), url("../fonts/xct.woff?201801092") format("woff"), url("../fonts/xct.svg?201801092#xct") format("svg");
+	font-weight: normal;
+	font-style: normal
+}
+
+.icon {
+	font-family: "xct" !important;
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale
+}
+
+.icon-black-keyboard-with-white-keys:before {
+	content: ""
+}
+
+.icon-token:before {
+	content: ""
+}
+
+.icon-bar:before {
+	content: ""
+}
+
+.icon-analysis:before {
+	content: ""
+}
+
+.icon-arrow:before {
+	content: ""
+}
+
+.icon-atm:before {
+	content: ""
+}
+
+.icon-cion:before {
+	content: ""
+}
+
+.icon-con_711:before {
+	content: ""
+}
+
+.icon-con_fmart:before {
+	content: ""
+}
+
+.icon-con_hilife:before {
+	content: ""
+}
+
+.icon-con_ok:before {
+	content: ""
+}
+
+.icon-credit:before {
+	content: ""
+}
+
+.icon-dallar:before {
+	content: ""
+}
+
+.icon-download:before {
+	content: ""
+}
+
+.icon-ecbuy:before {
+	content: ""
+}
+
+.icon-hand:before {
+	content: ""
+}
+
+.icon-in:before {
+	content: ""
+}
+
+.icon-moneybag:before {
+	content: ""
+}
+
+.icon-numball:before {
+	content: ""
+}
+
+.icon-out:before {
+	content: ""
+}
+
+.icon-poker1:before {
+	content: ""
+}
+
+.icon-sports_ball:before {
+	content: ""
+}
+
+.icon-target:before {
+	content: ""
+}
+
+.icon-pie-chart:before {
+	content: ""
+}
+
+.icon-question:before {
+	content: ""
+}
+
+.icon-graph:before {
+	content: ""
+}
+
+.icon-poker:before {
+	content: ""
+}
+
+.icon-poker-1:before {
+	content: ""
+}
+
+.icon-casino:before {
+	content: ""
+}
+
+.icon-deck:before {
+	content: ""
+}
+
+.icon-casino-1:before {
+	content: ""
+}
+
+.icon-hobbies-and-free-time:before {
+	content: ""
+}
+
+.icon-architecture-and-city:before {
+	content: ""
+}
+
+.icon-dice:before {
+	content: ""
+}
+
+.icon-casino-2:before {
+	content: ""
+}
+
+.icon-casino-3:before {
+	content: ""
+}
+
+.icon-roulette:before {
+	content: ""
+}
+
+.icon-roulette-wheel:before {
+	content: ""
+}
+
+.icon-statistics:before {
+	content: ""
+}
+
+.icon-increased-revenue:before {
+	content: ""
+}
+
+.icon-data:before {
+	content: ""
+}
+
+.icon-investment:before {
+	content: ""
+}
+
+.icon-pulse:before {
+	content: ""
+}
+
+.icon-multiple-users-silhouette:before {
+	content: ""
+}
+
+.icon-users-group:before {
+	content: ""
+}
+
+.icon-fire:before {
+	content: ""
+}
+
+.icon-money-bag-with-dollar-symbol:before {
+	content: ""
+}
+
+.icon-payment-method:before {
+	content: ""
+}
+
+.icon-money:before {
+	content: ""
+}
+
+.icon-bank:before {
+	content: ""
+}
+
+.icon-dollar:before {
+	content: ""
+}
+
+.icon-money-1:before {
+	content: ""
+}
+
+.icon-money-2:before {
+	content: ""
+}
+
+.icon-lamp:before {
+	content: ""
+}
+
+.icon-lamp-1:before {
+	content: ""
+}
+
+.icon-info:before {
+	content: ""
+}
+
+.icon-fire-1:before {
+	content: ""
+}
+
+.icon-business-and-finance:before {
+	content: ""
+}
+
+.icon-graph-1:before {
+	content: ""
+}
+
+.icon-graph-2:before {
+	content: ""
+}
+
+.icon-invest:before {
+	content: ""
+}
+
+.icon-cash:before {
+	content: ""
+}
+
+.icon-game:before {
+	content: ""
+}
+
+.icon-video-camera:before {
+	content: ""
+}
+
+.icon-menu:before {
+	content: ""
+}
+
+.icon-light-bulb-on:before {
+	content: ""
+}
+
+.icon-writing:before {
+	content: ""
+}
+
+.icon-verification-of-delivery-list-clipboard-symbol:before {
+	content: ""
+}
+
+.icon-support:before {
+	content: ""
+}
+
+.icon-handshake:before {
+	content: ""
+}
+
+.icon-book-with-bookmark-and-title:before {
+	content: ""
+}
+
+.icon-volleyball:before {
+	content: ""
+}
+
+.icon-arrow-point-to-right:before {
+	content: ""
+}
+
+.icon-chat-speech-bubbles:before {
+	content: ""
+}
+
+.icon-american-football:before {
+	content: ""
+}
+
+.icon-hockey:before {
+	content: ""
+}
+
+.icon-basketball:before {
+	content: ""
+}
+
+.icon-desktop-monitor:before {
+	content: ""
+}
+
+.icon-flag:before {
+	content: ""
+}
+
+.icon-gamepad-controller:before {
+	content: ""
+}
+
+.icon-soccer:before {
+	content: ""
+}
+
+.icon-softball:before {
+	content: ""
+}
+
+.icon-tennis-ball:before {
+	content: ""
+}
+
+.icon-tv:before {
+	content: ""
+}
+
+.icon-clapperboard:before {
+	content: ""
+}
+
+.icon-plus-18-movie:before {
+	content: ""
+}
+
+.icon-down-arr:before {
+	content: ""
+}

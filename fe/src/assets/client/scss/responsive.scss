@@ -1,0 +1,109 @@
+$sm: 640px;
+$md: 768px;
+$lg: 1024px;
+$xl: 1280px;
+$xxl: 1536px;
+
+$break-points: (
+    'sm': $sm,
+    'md': $md,
+    'lg': $lg,
+    'xl': $xl,
+    '2xl': $xxl
+);
+
+@mixin min-sm {
+    @media (min-width: #{$sm}) {
+        @content;
+    }
+}
+
+@mixin min-md {
+    @media (min-width: #{$md}) {
+        @content;
+    }
+}
+
+@mixin min-lg {
+    @media (min-width: #{$lg}) {
+        @content;
+    }
+}
+
+@mixin min-xl {
+    @media (min-width: #{$xl}) {
+        @content;
+    }
+}
+
+@mixin min-2xl {
+    @media (min-width: #{$xxl}) {
+        @content;
+    }
+}
+
+@mixin max-sm {
+    @media (max-width: #{$sm - 1px}) {
+        @content;
+    }
+}
+
+@mixin max-md {
+    @media (max-width: #{$md - 1px}) {
+        @content;
+    }
+}
+
+@mixin max-lg {
+    @media (max-width: #{$lg - 1px}) {
+        @content;
+    }
+}
+
+@mixin max-xl {
+    @media (max-width: #{$xl - 1px}) {
+        @content;
+    }
+}
+
+@mixin max-2xl {
+    @media (max-width: #{$xxl - 1px}) {
+        @content;
+    }
+}
+
+
+.container{
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+
+    @include min-sm {
+        max-width: 540px;
+    }
+    @include min-md {
+        max-width: 720px;
+    }
+
+    @include min-lg {
+        max-width: 960px;
+    }
+
+    @include min-xl() {
+        max-width: 1140px;
+    }
+
+    @include min-2xl() {
+        max-width: 1140px;
+    }
+}
+
+.container-fludid{
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}

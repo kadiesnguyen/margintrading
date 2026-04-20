@@ -1,0 +1,8 @@
+/node_modules
+/src/public
+/src/public_1
+/auth/upload/avatars/
+/auth/upload/champions/
+/auth/upload/passports/
+/build
+./deploy.zip

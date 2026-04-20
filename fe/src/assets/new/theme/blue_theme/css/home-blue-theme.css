@@ -1,0 +1,248 @@
+body {
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.home-blue-theme {
+    position: relative;
+    margin: auto;
+    padding: 4px 4px 4px 4px;
+    min-height: calc(100vh - 25px);
+    max-width: 500px;
+}
+
+.c-img {
+    display: block;
+    position: relative;
+    padding-top: 66%;
+}
+
+.c-img img,
+.c-img iframe,
+.c-img .bg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    object-fit: cover;
+}
+
+.home-slider .c-img {
+    padding-top: 33%;
+    border-radius: 10px;
+    max-height: 230px;
+}
+
+.home-slider .c-img img {
+    max-height: 230px;
+}
+
+.home-slider .tns-item {
+    max-height: 230px;
+}
+
+.tns-box.has-dot .tns-nav {
+    position: absolute;
+    left: 0;
+    bottom: 10px;
+    z-index: 2;
+    width: 100%;
+    text-align: center;
+    pointer-events: none;
+}
+
+.tns-box.has-dot .tns-nav button {
+    max-width: 8px;
+    width: 8px;
+    height: 8px;
+    display: inline-block;
+    border-radius: 50%;
+    outline: none;
+    border: none;
+    background: #fff;
+    opacity: .6;
+    transition: all .3s;
+    pointer-events: all;
+    padding: 0px;
+    margin: 0px 3px;
+}
+
+.tns-box.has-dot .tns-nav button.tns-nav-active {
+    opacity: 1;
+}
+
+.home-list-introduce {
+    display: flex;
+    margin-top: 20px;
+}
+
+.item-introduce {
+    width: 33%;
+    font-size: 16px;
+    text-align: center;
+    color: white;
+}
+
+.item-introduce .icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #e2eef3;
+    box-shadow: 0 0 6px #e2eef3;
+    margin: auto;
+}
+
+.item-introduce .icon img {
+    width: 35px;
+}
+
+.item-introduce .name {
+    padding: 0px 6px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.home-blue-theme .tool-box {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    align-items: center;
+    background: linear-gradient(0deg, #ceab77, #eddbc1);
+}
+
+.item-tool-box {
+    width: 25%;
+    padding: 12px;
+    color: #8e7654;
+    text-align: center;
+    text-decoration: none;
+}
+
+.item-tool-box .icon .svg-icon {
+    width: 30px !important;
+    height: 30px !important;
+}
+
+.item-tool-box .name {
+    font-size: 14px;
+}
+
+.home-base-info {
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.home-base-info .item-base-info {
+    width: 50%;
+}
+
+.home-base-info .item-base-info .currency {
+    display: block;
+    height: 93px;
+    background-size: 100% 100%;
+    padding: 20px 25px;
+    box-sizing: border-box;
+    overflow: hidden;
+    border-radius: 12px;
+    border-bottom-left-radius: 50px;
+    border: 2px solid #e2eef3;
+    box-shadow: 0 0 6px #e2eef3;
+}
+
+.home-base-info .item-base-info .currency .name {
+    font-size: 30px;
+    color: #fff;
+    font-weight: 700;
+    font-style: italic;
+    margin: 0.3rem;
+    display: inline-block;
+}
+
+.button-action {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    color: white;
+    text-decoration: none;
+    padding: 6px 8px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border: 2px solid #e2eef3;
+    box-shadow: 0 0 6px #e2eef3;
+}
+
+.button-action img {
+    width: 24px;
+    height: 24px;
+    margin-right: 5px;
+}
+
+.button-action:first-child {
+    margin-bottom: 10px;
+}
+
+.list-data {
+    height: 270px;
+    overflow: hidden;
+}
+
+.list-data .item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+    border-bottom: 1px solid #686156;
+    font-size: 16px;
+}
+
+.list-data .item p {
+    margin-top: 5px;
+    margin-bottom: 8px;
+}
+
+.list-data .item .name {
+    width: 20%;
+}
+
+.list-data .item .money {
+    width: 40%;
+    text-align: center;
+}
+
+.list-data .item .money .item-currency {
+    color: #999;
+}
+
+.list-data .item .money .item-money {
+    color: #ffe324;
+    font-weight: bold;
+}
+
+.list-data .item .time {
+    width: 40%;
+    text-align: right;
+}
+
+.list-data-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 0;
+    text-align: center;
+    color: white;
+}
