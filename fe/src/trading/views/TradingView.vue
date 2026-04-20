@@ -807,17 +807,8 @@ export default {
           y: parseFloat(k[5]),
           color: parseFloat(k[4]) >= parseFloat(k[1]) ? this.colorUp : this.colorDown,
         }))
-        const firstTime = candles.length ? candles[0][0] : null
-        const lastTime = candles.length ? candles[candles.length - 1][0] : null
-        const visibleRange = 24 * 60 * 1000
-        const axisMin = lastTime ? Math.max(firstTime, lastTime - visibleRange) : null
-        const axisMax = lastTime ? lastTime : null
         if (this.chart && this.chart.series[0]) {
           this.chart.yAxis[0].update({ tickInterval: null }, false)
-          if (axisMin !== null && axisMax !== null) {
-            this.chart.xAxis[0].setExtremes(axisMin, axisMax, false)
-          }
-
           this.chart.series[0].setData(candles, false)
           this.chart.series[1].setData(volumes, false)
           this.chart.redraw()
