@@ -490,12 +490,11 @@ export default {
           tickPositioner: function () {
             const positions = []
             if (!this.dataMin || !this.dataMax) return positions
-            const min = this.dataMin
-            const max = this.dataMax
-            const range = max - min
-            const numTicks = isMobile ? 6 : 9
-            for (let i = 0; i < numTicks; i++) {
-              positions.push(min + (range * i / (numTicks - 1)))
+            const interval = 3 * 60 * 1000
+            const start = Math.ceil(this.dataMin / interval) * interval
+            const end = this.dataMax
+            for (let tick = start; tick <= end; tick += interval) {
+              positions.push(tick)
             }
             return positions
           },
