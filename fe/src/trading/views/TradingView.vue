@@ -486,7 +486,25 @@ export default {
         },
         xAxis: {
           type: 'datetime',
-          tickAmount: 9,
+          tickPositioner: function () {
+            const positions = []
+            const min = this.dataMin
+            const max = this.dataMax
+            const interval = 3 * 60 * 1000 // 3 minutes
+
+            // Start from first tick aligned to 3-minute boundary
+            let tick = Math.floor(min / interval) * interval
+
+            // Generate exactly 9 ticks
+            for (let i = 0; i < 9; i++) {
+              if (tick >= min && tick <= max) {
+                positions.push(tick)
+              }
+              tick += interval
+            }
+
+            return positions
+          },
           labels: {
             enabled: true,
             formatter: function () { return Highcharts.dateFormat('%M:%S', this.value) },
