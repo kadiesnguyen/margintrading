@@ -489,12 +489,13 @@ export default {
           ordinal: false,
           tickPositioner: function () {
             const positions = []
-            const series = this.series[0]
-            if (!series || !series.points || series.points.length === 0) return positions
-            const points = series.points
-            const step = isMobile ? 4 : 3
-            for (let i = 1; i < points.length; i += step) {
-              positions.push(points[i].x)
+            if (!this.dataMin || !this.dataMax) return positions
+            const min = this.dataMin
+            const max = this.dataMax
+            const range = max - min
+            const numTicks = isMobile ? 6 : 9
+            for (let i = 0; i < numTicks; i++) {
+              positions.push(min + (range * i / (numTicks - 1)))
             }
             return positions
           },
