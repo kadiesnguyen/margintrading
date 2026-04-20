@@ -486,10 +486,7 @@ export default {
         },
         xAxis: {
           type: 'datetime',
-          units: [[
-            'minute',
-            [3]
-          ]],
+          tickAmount: 9,
           labels: {
             enabled: true,
             formatter: function () { return Highcharts.dateFormat('%M:%S', this.value) },
