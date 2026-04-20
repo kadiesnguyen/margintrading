@@ -479,7 +479,7 @@ export default {
           tickPositioner: function () {
             const positions = []
             if (!this.dataMin || !this.dataMax) return positions
-            const interval = 3 * 60 * 1000
+            const interval = 6 * 60 * 1000
             const start = Math.ceil(this.dataMin / interval) * interval
             const end = this.dataMax
             for (let tick = start; tick <= end; tick += interval) {
