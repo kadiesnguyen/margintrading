@@ -799,7 +799,7 @@ export default {
 
     async fetchBinanceKlines() {
       try {
-        const res = await fetch(`https://api.binance.com/api/v3/klines?symbol=${this.currentSymbol}&interval=1m&limit=200`)
+        const res = await fetch(`https://api.binance.com/api/v3/klines?symbol=${this.currentSymbol}&interval=1m&limit=100`)
         const data = await res.json()
         const candles = data.map(k => [k[0], parseFloat(k[1]), parseFloat(k[2]), parseFloat(k[3]), parseFloat(k[4])])
         const volumes = data.map(k => ({
