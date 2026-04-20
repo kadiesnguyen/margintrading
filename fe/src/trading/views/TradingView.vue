@@ -128,11 +128,11 @@
                     <div
                       v-for="item in depthPrice.total"
                       :key="item.id"
-                      style="display:flex;width:100%;padding:4px 10px;border-bottom:1px solid rgba(255,255,255,0.04);"
+                      style="display:flex;width:100%;padding:2px 12px;"
                     >
-                      <span style="flex:0 0 34%;overflow:hidden;font-size:13px;font-weight:500;line-height:22px;" :style="{ color: item.isBuy ? '#26c281' : '#f03a3a' }">{{ item.price }}</span>
-                      <span style="flex:0 0 36%;overflow:hidden;font-size:13px;font-weight:500;line-height:22px;color:#e2e8f0;">{{ item.amout }}</span>
-                      <span style="flex:0 0 30%;overflow:hidden;font-size:13px;font-weight:500;line-height:22px;color:#c0cad4;text-align:right;display:block;">{{ item.time }}</span>
+                      <span style="flex:0 0 34%;overflow:hidden;font-size:11px;font-weight:510;line-height:12px;" :style="{ color: item.isBuy ? '#5be584' : '#f13a3a' }">{{ item.price }}</span>
+                      <span style="flex:0 0 36%;overflow:hidden;font-size:11px;font-weight:510;line-height:12px;color:#f4f6f8;">{{ item.amout }}</span>
+                      <span style="flex:0 0 30%;overflow:hidden;font-size:11px;font-weight:510;line-height:12px;color:#f4f6f8;text-align:right;display:block;">{{ item.time }}</span>
                     </div>
                   </transition-group>
                 </div>
@@ -780,9 +780,9 @@ export default {
     initBinanceWebSocket() {
       const symbol = this.currentSymbol.toLowerCase()
 
-      // Connection 1: depth (order book) + miniTicker (24h stats)
+      // Connection 1: depth (order book) + 24hr ticker stats
       const ws1 = new WebSocket(
-        `wss://stream.binance.com/stream?streams=${symbol}@depth20@100ms/!miniTicker@arr@3000ms`
+        `wss://stream.binance.com/stream?streams=${symbol}@depth20@100ms/${symbol}@ticker`
       )
       ws1.onmessage = (e) => {
         const msg = JSON.parse(e.data)
@@ -802,20 +802,16 @@ export default {
           const bestPrice = bids.length ? parseFloat(bids[0][0]).toFixed(2) : this.prevDayPrice.lastPrice
           this.depthPrice.best = { price: bestPrice, type: 'sell' }
         }
-        if (msg.stream.includes('miniTicker@arr')) {
-          const sym = (msg.data || []).find(t => t.s === this.currentSymbol)
-          if (sym) {
-            const fmtComma = v => Number(parseFloat(v).toFixed(2)).toLocaleString('en-US')
-            const fmt2 = v => parseFloat(v).toFixed(2)
-            this.prevDayPrice.highPrice = fmtComma(sym.h)
-            this.prevDayPrice.lowPrice = fmtComma(sym.l)
-            this.prevDayPrice.volume = fmtComma(sym.v)
-            this.prevDayPrice.quoteVolume = fmtComma(sym.q)
-            const change = parseFloat(sym.c) - parseFloat(sym.o)
-            const changePct = (change / parseFloat(sym.o)) * 100
-            this.prevDayPrice.priceChange = fmt2(change)
-            this.prevDayPrice.priceChangePercent = fmt2(changePct)
-          }
+        if (msg.stream.includes('@ticker')) {
+          const t = msg.data
+          const fmtComma = v => Number(parseFloat(v).toFixed(2)).toLocaleString('en-US')
+          const fmt2 = v => parseFloat(v).toFixed(2)
+          this.prevDayPrice.highPrice = fmtComma(t.h)
+          this.prevDayPrice.lowPrice = fmtComma(t.l)
+          this.prevDayPrice.volume = fmtComma(t.v)
+          this.prevDayPrice.quoteVolume = fmtComma(t.q)
+          this.prevDayPrice.priceChange = fmt2(t.p)
+          this.prevDayPrice.priceChangePercent = fmt2(t.P)
         }
       }
       ws1.onerror = () => {}
@@ -832,7 +828,7 @@ export default {
         const entry = {
           id: ++this.tradeSeq,
           price: parseFloat(t.p).toFixed(2),
-          amout: (() => { const q = parseFloat(t.q); return q >= 10 ? q.toFixed(2) : q >= 1 ? q.toFixed(4) : q.toFixed(6); })(),
+          amout: parseFloat(t.q).toFixed(8),
           time: `${hh}:${mm}:${ss}`,
           isBuy: !t.m,
         }
@@ -877,6 +873,17 @@ export default {
 
 <style>
 body { overflow-y: auto; background: #010101; }
+
+/* Order book left panel — match reference 11px */
+.trada_parameter_left .parameter_content .colum_number {
+  font-size: 11px !important;
+  line-height: 12px !important;
+  font-weight: 510 !important;
+}
+.trada_parameter_left .parameter_left_body p {
+  font-size: 18px !important;
+  font-weight: 600 !important;
+}
 
 /* Trades tape — global overrides */
 .trada_parameter_right .parameter_left_row { width: 100% !important; }
@@ -930,31 +937,30 @@ body { overflow-y: auto; background: #010101; }
 .trada_parameter_right .parameter_title_wrapper {
   display: flex;
   width: 100%;
-  padding: 7px 10px;
+  padding: 4px 12px;
   background: #0d1520;
   border-bottom: 1px solid rgba(255,255,255,0.10);
   flex-shrink: 0;
 }
 .trada_parameter_right .top_colum_title {
-  color: #7b92a8 !important;
-  font-size: 12px !important;
-  font-weight: 500;
-  line-height: 18px !important;
-  letter-spacing: 0.02em;
+  color: #637381 !important;
+  font-size: 11px !important;
+  font-weight: 400;
+  line-height: 12px !important;
   width: 33.3%;
+  padding-bottom: 4px;
 }
 .trada_parameter_right .parameter_content {
   display: flex;
   width: 100%;
-  padding: 4px 10px !important;
-  border-bottom: 1px solid rgba(255,255,255,0.04) !important;
+  padding: 2px 12px !important;
   align-items: center;
   background: #060c12;
 }
 .trada_parameter_right .parameter_content .colum_number {
-  font-size: 13px !important;
-  line-height: 22px !important;
-  font-weight: 500;
+  font-size: 11px !important;
+  line-height: 12px !important;
+  font-weight: 510;
   font-family: 'SF Pro', -apple-system, 'Segoe UI', monospace !important;
 }
 
