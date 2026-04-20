@@ -306,7 +306,7 @@ export default {
       showCurrencyMenu: false,
       currentSymbol: 'ETHUSDT',
       symbols: ['BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'NEARUSDT', 'DOTUSDT'],
-      betAmount: 50000,
+      betAmount: 0,
       session: 0,
       seconDown: 60,
       textTimeDown: 'Đếm ngược',
