@@ -140,7 +140,7 @@
             </div>
 
             <!-- Betting Controls -->
-            <div class="trande_levels">
+            <div class="trande_levels" pading-top="5px">
               <!-- Session info -->
               <div class="trande_levels_groupbutton">
                 <div class="info-trade-area">
@@ -424,7 +424,7 @@ export default {
           panning: false,
           followTouchMove: false,
           width: null,
-          height: isMobile ? '100%' : '56.25%',
+          height: isMobile ? '100%' : 565,
           zoomType: '',
           backgroundColor: 'transparent',
           marginLeft: 0,
