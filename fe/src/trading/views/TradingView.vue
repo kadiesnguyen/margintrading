@@ -486,28 +486,13 @@ export default {
         },
         xAxis: {
           type: 'datetime',
-          tickPositioner: function () {
-            const positions = []
-            const min = this.dataMin
-            const max = this.dataMax
-            const interval = 3 * 60 * 1000 // 3 minutes
-
-            // Start from first tick aligned to 3-minute boundary
-            let tick = Math.floor(min / interval) * interval
-
-            // Generate exactly 9 ticks
-            for (let i = 0; i < 9; i++) {
-              if (tick >= min && tick <= max) {
-                positions.push(tick)
-              }
-              tick += interval
-            }
-
-            return positions
-          },
+          tickAmount: 9,
+          ordinal: false,
+          minPadding: 0.05,
+          maxPadding: 0.05,
           labels: {
             enabled: true,
-            formatter: function () { return Highcharts.dateFormat('%H:%M', this.value) },
+            formatter: function () { return Highcharts.dateFormat('%M:%S', this.value) },
             style: { fontSize: 10, color: '#707070' },
           },
           plotLines: [{ value: 0, color: 'rgba(255,255,255,0)', width: 0.75, id: 'current-timex', zIndex: 1000, dashStyle: 'Dash' }],
@@ -825,9 +810,16 @@ export default {
           y: parseFloat(k[5]),
           color: parseFloat(k[4]) >= parseFloat(k[1]) ? this.colorUp : this.colorDown,
         }))
+        const firstTime = candles.length ? candles[0][0] : null
+        const lastTime = candles.length ? candles[candles.length - 1][0] : null
+        const visibleRange = 24 * 60 * 1000
+        const axisMin = lastTime ? Math.max(firstTime, lastTime - visibleRange) : null
+        const axisMax = lastTime ? lastTime : null
         if (this.chart && this.chart.series[0]) {
-          // Remove tickInterval to let tickAmount control the number of ticks
           this.chart.yAxis[0].update({ tickInterval: null }, false)
+          if (axisMin !== null && axisMax !== null) {
+            this.chart.xAxis[0].setExtremes(axisMin, axisMax, false)
+          }
 
           this.chart.series[0].setData(candles, false)
           this.chart.series[1].setData(volumes, false)
