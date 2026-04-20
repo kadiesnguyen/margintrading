@@ -493,7 +493,7 @@ export default {
               x: isMobile ? 45 : 50,
               style: { color: '#fff', fontSize: '11px' },
             },
-            height: '90%',
+            height: '83%',
             top: 0,
             plotLines: [{
               value: 0,
@@ -510,12 +510,16 @@ export default {
               },
             }],
             lineWidth: 0,
-            resize: { enabled: true },
+            resize: {
+              enabled: true,
+              lineColor: 'rgba(255,255,255,0.12)',
+              lineWidth: 1,
+            },
           },
           {
             gridLineColor: '',
             visible: false,
-            top: isMobile ? '85%' : '83.4%',
+            top: isMobile ? '85%' : '85%',
             height: '15%',
             lineWidth: 0,
             offset: 0,
@@ -546,7 +550,7 @@ export default {
             marker: { enabled: false },
             zIndex: 3,
             enableMouseTracking: false,
-            params: { index: 0, period: 10 },
+            params: { index: 3, period: 10 },
           },
           {
             name: 'sma2',
@@ -558,7 +562,7 @@ export default {
             marker: { enabled: false },
             zIndex: 3,
             enableMouseTracking: false,
-            params: { index: 1, period: 5 },
+            params: { index: 3, period: 5 },
           },
         ],
       })
