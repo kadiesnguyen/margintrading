@@ -368,7 +368,18 @@ export default {
       nowTime: 0,
       gameTime: 0,
       startTime: 0,
+      colorUp: '#01b58c',
+      colorDown: '#f81057',
+      klineRedrawTimer: null,
     }
+  },
+
+  watch: {
+    seconDown() {
+      if (this.prevDayPrice.lastPrice && this.prevDayPrice.lastPrice !== '0') {
+        this.updateCurrentPriceLine(this.prevDayPrice.lastPrice)
+      }
+    },
   },
 
   computed: {
@@ -405,8 +416,8 @@ export default {
       if (!el) return
 
       const isMobile = this.isMobile
-      const colorDown = '#e54150'
-      const colorUp = '#23a776'
+      const colorDown = this.colorDown
+      const colorUp = this.colorUp
 
       this.chart = Highcharts.stockChart(el, {
         chart: {
@@ -451,25 +462,27 @@ export default {
           },
         },
         tooltip: {
+          shared: true,
           split: false,
           enabled: true,
           animation: false,
-          backgroundColor: 'rgba(8,26,52,0.5)',
+          backgroundColor: 'rgba(8,26,52,0.85)',
           borderColor: 'transparent',
           borderWidth: 0,
           shadow: false,
           useHTML: true,
           style: { color: '#fff', fontSize: '10px' },
           formatter: function () {
-            if (this.series.name === 'ETH/USDT') {
-              return `<span style="margin-right:10px"><b>O</b>: ${this.point.open}</span>
-                      <span style="margin-right:10px"><b>C</b>: ${this.point.close}</span><br/>
-                      <span style="margin-right:10px"><b>H</b>: ${this.point.high}</span>
-                      <span style="margin-right:10px"><b>L</b>: ${this.point.low}</span>`
-            }
-            return this.y ? `<b>Vol</b>: ${this.y}` : ''
+            const pts = this.points || []
+            const c = pts.find(p => p.series.type === 'candlestick')
+            const v = pts.find(p => p.series.type === 'column')
+            if (!c) return false
+            const pt = c.point
+            return `<span style="margin-right:8px"><b>O</b>: ${pt.open}</span><span><b>C</b>: ${pt.close}</span><br>` +
+                   `<span style="margin-right:8px"><b>H</b>: ${pt.high}</span><span style="margin-right:8px"><b>L</b>: ${pt.low}</span>` +
+                   (v ? `<span><b>Vol</b>: ${v.y.toFixed(2)}</span>` : '')
           },
-          positioner: function () { return { x: 20, y: isMobile ? 50 : 60 } },
+          positioner: function () { return { x: 20, y: isMobile ? 50 : 15 } },
         },
         xAxis: {
           type: 'datetime',
@@ -478,7 +491,7 @@ export default {
             formatter: function () { return Highcharts.dateFormat('%M:%S', this.value) },
             style: { fontSize: 10, color: '#707070' },
           },
-          plotLines: [{ value: 0, color: '#ffffff', width: 0.75, id: 'current-pricex', zIndex: 1000, dashStyle: 'LongDash' }],
+          plotLines: [{ value: 0, color: 'rgba(255,255,255,0)', width: 0.75, id: 'current-timex', zIndex: 1000, dashStyle: 'Dash' }],
           lineWidth: 0,
           minorGridLineWidth: 0,
           lineColor: 'transparent',
@@ -584,8 +597,7 @@ export default {
         const info = JSON.parse(e.data)
 
         if (info.type === 'get_config_history') {
-          this.tmp = info.data
-          this.buildCandleFromHistory(info.data)
+          // Chart now driven by Binance klines — skip game server history
         }
 
         if (info.type === 'get_config') {
@@ -594,14 +606,11 @@ export default {
           this.gameTime = info.data.gameTime
           this.startTime = info.data.gameTime + 60000
           this.seconDown = info.data.time
-          this.tmp[info.data.nowTime] = info.data.price
-
-          this.updateCurrentPrice(info.data.price)
-          this.updateChartCurrentBar(info.data)
+          // Chart and price label are updated via Binance kline stream
         }
 
         if (info.type === 'get_config_gui') {
-          this.updateMarketStats(info.data)
+          // Stats (High/Low/Vol/Change) now come from Binance @ticker stream
         }
 
         if (info.type === 'hist_results') {
@@ -632,88 +641,6 @@ export default {
       this.connection.onclose = () => {
         this.wsReady = false
       }
-    },
-
-    buildCandleFromHistory(histData) {
-      if (!this.chart) return
-      const keys = Object.keys(histData).map(Number).sort((a, b) => a - b)
-      if (keys.length < 2) return
-
-      // Group into 1-minute OHLC bars
-      const minuteMap = {}
-      for (const ts of keys) {
-        const minuteTs = Math.floor(ts / 60000) * 60000
-        const price = parseFloat(histData[ts])
-        if (!minuteMap[minuteTs]) {
-          minuteMap[minuteTs] = { open: price, high: price, low: price, close: price, vol: 0 }
-        } else {
-          minuteMap[minuteTs].high = Math.max(minuteMap[minuteTs].high, price)
-          minuteMap[minuteTs].low = Math.min(minuteMap[minuteTs].low, price)
-          minuteMap[minuteTs].close = price
-          minuteMap[minuteTs].vol += Math.abs(price - minuteMap[minuteTs].open)
-        }
-      }
-
-      const minuteKeys = Object.keys(minuteMap).map(Number).sort((a, b) => a - b)
-      const candles = minuteKeys.map(t => {
-        const b = minuteMap[t]
-        return [t, b.open, b.high, b.low, b.close]
-      })
-      const volumes = minuteKeys.map(t => [t, minuteMap[t].vol * 100 || 10])
-
-      this.candleData = candles
-      this.volumeData = volumes
-
-      if (this.chart.series[0]) {
-        this.chart.series[0].setData(candles, false)
-        this.chart.series[1].setData(volumes, false)
-        this.chart.redraw()
-      }
-    },
-
-
-    updateChartCurrentBar(data) {
-      if (!this.chart) return
-      const price = parseFloat(data.price)
-      const nowTime = data.nowTime
-      const series = this.chart.series[0]
-      if (!series) return
-
-      const pts = series.points
-      const lastPt = pts && pts[pts.length - 1]
-      const barTime = Math.floor(nowTime / 60000) * 60000
-
-      if (lastPt && lastPt.x === barTime) {
-        const newHigh = Math.max(lastPt.high, price)
-        const newLow = Math.min(lastPt.low, price)
-        lastPt.update([barTime, lastPt.open, newHigh, newLow, price], true)
-      } else if (!lastPt || barTime > lastPt.x) {
-        const prevClose = lastPt ? lastPt.close : price
-        series.addPoint([barTime, prevClose, price, price, price], true, pts && pts.length > 300)
-      }
-
-      // Update current price line
-      try {
-        this.chart.yAxis[0].removePlotLine('current-price')
-        this.chart.yAxis[0].addPlotLine({
-          value: price,
-          color: '#ffffff',
-          width: 0.75,
-          id: 'current-price',
-          zIndex: 100,
-          label: {
-            useHTML: true,
-            text: String(price),
-            x: this.isMobile ? 60 : 70,
-            align: 'right',
-            style: { color: '#fff', fontSize: '11px' },
-          },
-        })
-      } catch (e) {}
-    },
-
-    updateCurrentPrice(price) {
-      this.prevDayPrice.lastPrice = parseFloat(price).toFixed(2)
     },
 
     updateMarketStats(data) {
@@ -784,13 +711,19 @@ export default {
     initBinanceWebSocket() {
       const symbol = this.currentSymbol.toLowerCase()
 
-      // Connection 1: depth (order book) + 24hr ticker stats
+      // Load historical klines from Binance REST API
+      this.fetchBinanceKlines()
+
+      // Connection 1: depth (order book) + 24hr ticker + kline for chart
       const ws1 = new WebSocket(
-        `wss://stream.binance.com/stream?streams=${symbol}@depth20@100ms/${symbol}@ticker`
+        `wss://stream.binance.com/stream?streams=${symbol}@depth20@100ms/${symbol}@ticker/${symbol}@kline_1m`
       )
       ws1.onmessage = (e) => {
         const msg = JSON.parse(e.data)
         if (!msg.stream) return
+        if (msg.stream.includes('@kline_1m')) {
+          this.updateChartFromKline(msg.data.k)
+        }
         if (msg.stream.includes('@depth20')) {
           const d = msg.data
           const asks = (d.asks || []).slice(0, 5)
@@ -861,6 +794,111 @@ export default {
 
     formatPrice: helper.formatPrice,
     formatDate: helper.formatDate,
+
+    async fetchBinanceKlines() {
+      try {
+        const res = await fetch(`https://api.binance.com/api/v3/klines?symbol=${this.currentSymbol}&interval=1m&limit=60`)
+        const data = await res.json()
+        const candles = data.map(k => [k[0], parseFloat(k[1]), parseFloat(k[2]), parseFloat(k[3]), parseFloat(k[4])])
+        const volumes = data.map(k => ({
+          x: k[0],
+          y: parseFloat(k[5]),
+          color: parseFloat(k[4]) >= parseFloat(k[1]) ? this.colorUp : this.colorDown,
+        }))
+        if (this.chart && this.chart.series[0]) {
+          this.chart.series[0].setData(candles, false)
+          this.chart.series[1].setData(volumes, false)
+          this.chart.redraw()
+        }
+        // Update header price from last kline close
+        if (data.length > 0) {
+          const lastClose = parseFloat(data[data.length - 1][4]).toFixed(2)
+          this.prevDayPrice.lastPrice = lastClose
+          this.updateCurrentPriceLine(lastClose)
+        }
+      } catch (e) {}
+    },
+
+    updateChartFromKline(k) {
+      if (!this.chart) return
+      const series = this.chart.series[0]
+      const volSeries = this.chart.series[1]
+      if (!series) return
+
+      const barTime = k.t
+      const open = parseFloat(k.o)
+      const high = parseFloat(k.h)
+      const low = parseFloat(k.l)
+      const close = parseFloat(k.c)
+      const vol = parseFloat(k.v)
+      const isUp = close >= open
+
+      const pts = series.points
+      const lastPt = pts && pts[pts.length - 1]
+
+      if (lastPt && lastPt.x === barTime) {
+        lastPt.update([barTime, open, high, low, close], false)
+        if (volSeries) {
+          const volPts = volSeries.points
+          const lastVolPt = volPts && volPts[volPts.length - 1]
+          if (lastVolPt && lastVolPt.x === barTime) {
+            lastVolPt.update({ x: barTime, y: vol, color: isUp ? this.colorUp : this.colorDown }, false)
+          }
+        }
+      } else if (!lastPt || barTime > lastPt.x) {
+        series.addPoint([barTime, open, high, low, close], false, pts && pts.length > 300)
+        if (volSeries) {
+          const volPts = volSeries.points
+          volSeries.addPoint({ x: barTime, y: vol, color: isUp ? this.colorUp : this.colorDown }, false, volPts && volPts.length > 300)
+        }
+      }
+
+      // Always keep vertical dashed line at current candle position
+      try {
+        this.chart.xAxis[0].removePlotLine('current-timex')
+        this.chart.xAxis[0].addPlotLine({
+          value: barTime,
+          color: 'rgba(255,255,255,0.75)',
+          width: 0.75,
+          id: 'current-timex',
+          zIndex: 1000,
+          dashStyle: 'Dash',
+        })
+      } catch (e) {}
+
+      // Update price and header
+      this.prevDayPrice.lastPrice = close.toFixed(2)
+      this.updateCurrentPriceLine(close)
+
+      clearTimeout(this.klineRedrawTimer)
+      this.klineRedrawTimer = setTimeout(() => {
+        if (this.chart) this.chart.redraw()
+      }, 200)
+    },
+
+    updateCurrentPriceLine(price) {
+      if (!this.chart) return
+      const mm = String(Math.floor(this.seconDown / 60)).padStart(2, '0')
+      const ss = String(this.seconDown % 60).padStart(2, '0')
+      const priceStr = parseFloat(price).toFixed(2)
+      try {
+        this.chart.yAxis[0].removePlotLine('current-price')
+        this.chart.yAxis[0].addPlotLine({
+          value: parseFloat(price),
+          color: '#ffffff',
+          width: 0.75,
+          id: 'current-price',
+          zIndex: 100,
+          label: {
+            useHTML: true,
+            text: `<div style="display:flex;flex-direction:column;line-height:1.3;background:rgba(13,41,68,0.9);padding:1px 4px;border-radius:2px;"><span style="font-size:11px;color:#fff;">${priceStr}</span><span style="align-self:flex-end;font-size:10px;color:#cdd;">${mm}:${ss}</span></div>`,
+            x: this.isMobile ? 58 : 68,
+            align: 'right',
+            style: { color: '#fff' },
+          },
+        })
+      } catch (e) {}
+    },
 
     formatNumber(val, min, max) {
       return Number(val).toLocaleString('en-US', { minimumFractionDigits: min, maximumFractionDigits: max })
