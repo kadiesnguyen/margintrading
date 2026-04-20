@@ -91,7 +91,7 @@
                   <div 
                     v-for="(ask, i) in depthPrice.asks"
                     :key="'ask-'+i"
-                    class="parameter_content" style="padding-bottom: 10px;"
+                    class="parameter_content" 
                   >
                     <div class="colum_number colum_number_red">{{ ask.price }}</div>
                     <div class="text-right colum_number">{{ ask.amout }}</div>
@@ -117,7 +117,7 @@
               </div>
 
               <!-- Giao dịch tab (history for mobile) -->
-              <div v-show="!isMobile || menuTopHeader === 2" class="trada_parameter_right">
+              <div v-show="!isMobile || menuTopHeader === 2" class="trada_parameter_right" style="padding-bottom: 10px;">
                 <div class="parameter_left_row">
                   <div class="parameter_title_wrapper">
                     <div class="top_colum_title">Price(USDT)</div>
@@ -797,7 +797,7 @@ export default {
 
     async fetchBinanceKlines() {
       try {
-        const res = await fetch(`https://api.binance.com/api/v3/klines?symbol=${this.currentSymbol}&interval=1m&limit=60`)
+        const res = await fetch(`https://api.binance.com/api/v3/klines?symbol=${this.currentSymbol}&interval=1m&limit=52`)
         const data = await res.json()
         const candles = data.map(k => [k[0], parseFloat(k[1]), parseFloat(k[2]), parseFloat(k[3]), parseFloat(k[4])])
         const volumes = data.map(k => ({
