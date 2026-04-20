@@ -507,7 +507,7 @@ export default {
           },
           labels: {
             enabled: true,
-            formatter: function () { return Highcharts.dateFormat('%M:%S', this.value) },
+            formatter: function () { return Highcharts.dateFormat('%H:%M', this.value) },
             style: { fontSize: 10, color: '#707070' },
           },
           plotLines: [{ value: 0, color: 'rgba(255,255,255,0)', width: 0.75, id: 'current-timex', zIndex: 1000, dashStyle: 'Dash' }],
