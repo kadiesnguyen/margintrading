@@ -486,7 +486,7 @@ export default {
         },
         xAxis: {
           type: 'datetime',
-          ordinal: true,
+          ordinal: false,
           tickPositioner: function () {
             const positions = []
             const series = this.series[0]
