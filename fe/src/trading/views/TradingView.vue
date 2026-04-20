@@ -806,6 +806,14 @@ export default {
           color: parseFloat(k[4]) >= parseFloat(k[1]) ? this.colorUp : this.colorDown,
         }))
         if (this.chart && this.chart.series[0]) {
+          // Compute tick interval from price range to get clean round numbers
+          const highs = data.map(k => parseFloat(k[2]))
+          const lows = data.map(k => parseFloat(k[3]))
+          const range = Math.max(...highs) - Math.min(...lows)
+          const rawTick = range / 10
+          const tickInterval = rawTick <= 1.5 ? 1 : rawTick <= 3 ? 2 : rawTick <= 7.5 ? 5 : rawTick <= 15 ? 10 : rawTick <= 75 ? 50 : rawTick <= 150 ? 100 : 500
+          this.chart.yAxis[0].update({ tickInterval }, false)
+
           this.chart.series[0].setData(candles, false)
           this.chart.series[1].setData(volumes, false)
           this.chart.redraw()
@@ -891,7 +899,7 @@ export default {
           zIndex: 100,
           label: {
             useHTML: true,
-            text: `<div style="display:flex;flex-direction:column;line-height:1.3;background:rgba(13,41,68,0.9);padding:1px 4px;border-radius:2px;"><span style="font-size:11px;color:#fff;">${priceStr}</span><span style="align-self:flex-end;font-size:10px;color:#cdd;">${mm}:${ss}</span></div>`,
+            text: `<div style="display:flex;flex-direction:column;line-height:1.3;background:#132d48;padding:1px 6px;border-radius:2px;min-width:60px;"><span style="font-size:11px;color:#fff;white-space:nowrap;">${priceStr}</span><span style="align-self:flex-end;font-size:10px;color:#94b4cc;">${mm}:${ss}</span></div>`,
             x: this.isMobile ? 58 : 68,
             align: 'right',
             style: { color: '#fff' },
