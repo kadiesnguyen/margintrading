@@ -486,6 +486,7 @@ export default {
         },
         xAxis: {
           type: 'datetime',
+          tickAmount: 9,
           labels: {
             enabled: true,
             formatter: function () { return Highcharts.dateFormat('%M:%S', this.value) },
